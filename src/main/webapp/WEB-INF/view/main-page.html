@@ -7,6 +7,8 @@
     <h1>Registration Successful!</h1>
     <p>Welcome People!</p>
 
+    <button> <a th:href="@{/login/add}">Добавить новую новость</a> </button><!-- Add News Button -->
+
     <h2>Latest News</h2>
     <div th:if="${not #lists.isEmpty(newsList)}">  <!-- Check if the list is not empty -->
         <ul>
@@ -14,6 +16,13 @@
                 <strong th:text="${news.title}"></strong><br/>
                 <span th:text="${news.content}"></span>
                 <p th:text="${#dates.format(news.publicationDate, 'dd-MM-yyyy HH:mm')}"></p> <!-- Display Date -->
+
+                <!-- Action Buttons for each news item -->
+                <div>
+                    <button><a th:href="@{/news/details/{id}(id=${news.id})}">Details</a> </button><!-- Details Button -->
+                    <button> <a th:href="@{/news/edit/{id}(id=${news.id})}">Edit</a> </button><!-- Edit Button -->
+                    <button> <a th:href="@{/news/delete/{id}(id=${news.id})}">Delete</a></button> <!-- Delete Button -->
+                </div>
             </li>
         </ul>
     </div>
@@ -22,4 +31,3 @@
     </div>
 </body>
 </html>
-
