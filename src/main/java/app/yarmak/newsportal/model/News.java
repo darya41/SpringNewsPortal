@@ -4,14 +4,12 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "news") // Corrected table name to "news"
@@ -51,73 +49,138 @@ public class News implements Serializable {
   @Column(name = "idCategory") // Added idCategory field
   private int idCategory;
 
-  public News() {}
+  public News() {
+	}
+	
+	public News(int id,String title, String brief, String content, String author, 
+			Timestamp  publicationDate,int idCategory,int views, int priority, String status) {
+		super();
+		this.id=id;
+		this.title = title;
+		this.brief = brief;
+		this.content=content;
+		this.author=author;
+		this.publicationDate=publicationDate;
+		this.idCategory=idCategory;
+		this.views=views;
+		this.priority = priority;
+		this.status = status;
+	}
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id=id;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
 
-  public News(
-      int id,
-      String title,
-      String brief,
-      String content,
-      String author,
-      Timestamp publicationDate,
-      int views,
-      int priority,
-      String status,
-      int idCategory) {  // Added idCategory to the constructor
-    super();
-    this.id = id;
-    this.title = title;
-    this.brief = brief;
-    this.content = content;
-    this.author = author;
-    this.publicationDate = publicationDate;
-    this.views = views;
-    this.priority = priority;
-    this.status = status;
-    this.idCategory = idCategory;
-  }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-  public int getId() {
-    return id;
-  }
+	public String getBrief() {
+		return brief;
+	}
 
-  public void setId(int id) {
-    this.id = id;
-  }
+	public void setBrief(String brief) {
+		this.brief = brief;
+	}
+	
+	public String getContent() {
+     return content;
+	}
 
-  public String getTitle() {
-    return title;
-  }
+	public void setContent(String content) {
+		this.content = content;
+	}
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+	public String getAuthor() {
+		return author;
+	}
 
-  public String getBrief() {
-    return brief;
-  }
+	public void setAuthor(String author) {
+		this.author = author;
+	}
 
-  public void setBrief(String brief) {
-    this.brief = brief;
-  }
+	public Timestamp  getPublicationDate() {
+		return publicationDate;
+	}
 
-  public String getContent() {
-    return content;
-  }
+	public void setPublicationDate(Timestamp  publicationDate) {
+		this.publicationDate = publicationDate;
+	}
 
-  public void setContent(String content) {
-    this.content = content;
-  }
+	public int getCategory() {
+		return idCategory;
+	}
 
-  public String getAuthor() {
-    return author;
-  }
+	public void setCategory(int category) {
+		this.idCategory = category;
+	}
 
-  public void setAuthor(String author) {
-    this.author = author;
-  }
+	public int getViews() {
+		return views;
+	}
 
-  public Timestamp getPublicationDate() {
-    return publicationDate;
-  }
+	public void setViews(int views) {
+		this.views = views;
+	}
+ 
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+	public String getStatus() {
+	   return status;
+	}
+	public void setStatus(String status) {
+	   this.status=status;
+	}
+
+	
+	@Override
+	public int hashCode() {
+		 return Objects.hash(id, title, brief, content, author, publicationDate, idCategory, views,priority, status);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+	    News news = (News) obj;
+	    return id == news.id &&
+	            views == news.views &&
+	            Objects.equals(title, news.title) &&
+	            Objects.equals(brief, news.brief) &&
+	            Objects.equals(content, news.content) &&
+	            Objects.equals(author, news.author) &&
+	            Objects.equals(publicationDate, news.publicationDate) &&
+	            Objects.equals(idCategory, news.idCategory)&&
+	            Objects.equals(priority, news.priority)&&
+	    		Objects.equals(status, news.status);
+	    
+	}
+
+	@Override
+	public String toString() {
+     return "News{" +
+             "id=" + id +
+             ", title='" + title + '\'' +
+             ", summary='" + brief + '\'' +
+             ", content='" + content + '\'' +
+             ", author='" + author + '\'' +
+             ", publicationDate=" + publicationDate +
+             ", category='" + idCategory + '\'' +
+             ", views=" + views +
+              ", views=" + views +
+               ", views=" + views +
+             '}';
+ }	
 }

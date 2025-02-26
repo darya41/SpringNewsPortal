@@ -11,6 +11,8 @@
     	http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+		<bean id="news" class="app.yarmak.newsportal.model.News"></bean>
+ 
 	<!-- Step 3: Add support for component scanning -->
 	<context:component-scan
 		base-package="app.yarmak.newsportal" />
@@ -25,6 +27,7 @@
 		<property name="suffix" value=".html" />
 		<property name="templateMode" value="HTML" />
 		<property name="characterEncoding" value="UTF-8" />
+		<property name="cacheable" value="false" /> 
 	</bean>
 
 	<bean id="templateEngine"

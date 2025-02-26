@@ -8,11 +8,11 @@ public interface NewsService {
 	
 	 List<News> getAllNews();
 
-	 News getNewsById(Long id);
+	 News getNewsById(int id);
 
 	 void addNews(News news);
 
 	 void updateNews(News news);
 
-	 void deleteNews(Long id);
+	 void deleteNews(int id);
 }

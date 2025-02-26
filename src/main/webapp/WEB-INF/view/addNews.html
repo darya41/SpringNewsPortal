@@ -3,65 +3,77 @@
 <head>
     <title>Add News</title>
     <style>
-        label {
-            display: block; /* Put each label on its own line */
-            margin-top: 10px;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
         }
-        input[type="text"],
-        textarea,
-        select {
-            width: 300px; /* Adjust width as needed */
-            padding: 5px;
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
             margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         input[type="submit"] {
             background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
         }
-        .error {
-            color: red;
+        input[type="submit"]:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <h1>Add New Article</h1>
+    <h1>Добавить новость</h1>
 
-    <form action="#" th:action="@{/news/add}" th:object="${news}" method="post">  <!--  th:object and th:field are crucial  -->
+    <form th:action="@{add}" th:object="${news}" method="post">
+        <label for="title">Название:</label>
+        <input type="text" id="title" th:field="*{title}" required="required" />
+        <br>
 
-        <label for="title">Title:</label>
-        <input type="text" id="title" th:field="*{title}" required="required" th:value="${news.title}"/>
-        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error"></span> <!-- Error message -->
+        <label for="brief">Краткое описание:</label>
+        <textarea id="brief" th:field="*{brief}" rows="3" required="required"></textarea>
+        <br>
 
-        <label for="brief">Brief:</label>
-        <textarea id="brief" th:field="*{brief}" rows="3" required="required" th:text="${news.brief}"></textarea>
-        <span th:if="${#fields.hasErrors('brief')}" th:errors="*{brief}" class="error"></span>
+        <label for="content">Содержание:</label>
+        <textarea id="content" th:field="*{content}" rows="5" required="required"></textarea>
+        <br>
 
-        <label for="content">Content:</label>
-        <textarea id="content" th:field="*{content}" rows="5" required="required" th:text="${news.content}"></textarea>
-        <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="error"></span>
+        <label for="author">Автор:</label>
+        <input type="text" id="author" th:field="*{author}" required="required" />
+        <br>
 
-        <label for="author">Author:</label>
-        <input type="text" id="author" th:field="*{author}" required="required" th:value="${news.author}"/>
-        <span th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="error"></span>
+        <label for="priority">Приоритет:</label>
+        <input type="number" id="priority" th:field="*{priority}" min="1" max="10" />
+        <br>
 
-        <!-- <label for="idCategory">Category:</label>
-        <select id="idCategory" th:field="*{idCategory}"> 
-            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-        </select>
-        <span th:if="${#fields.hasErrors('idCategory')}" th:errors="*{idCategory}" class="error"></span>  -->
+        <label for="status">Статус:</label>
+        <input type="text" id="status" th:field="*{status}" />
+        <br>
 
-
-        <label for="priority">Priority:</label>
-        <input type="number" id="priority" th:field="*{priority}" th:value="${news.priority}" min="1" max="10"/> <!-- Default value and range -->
-
-        <label for="status">Status:</label>
-        <input type="text" id="status" th:field="*{status}" th:value="${news.status}"/> <!-- Example default value -->
-
-        <input type="submit" value="Add Article"/>
+        <input type="submit" value="Добавить статью" />
     </form>
-
 </body>
 </html>

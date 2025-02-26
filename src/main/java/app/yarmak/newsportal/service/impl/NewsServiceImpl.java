@@ -2,42 +2,51 @@ package app.yarmak.newsportal.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import app.yarmak.newsportal.model.News;
 import app.yarmak.newsportal.service.NewsService;
 import app.yarmak.newsportal.dao.*;
-import app.yarmak.newsportal.dao.impl.NewsDaoImpl;
 
+@Component
+@Service
 public class NewsServiceImpl implements NewsService{
 	
-	private final NewsDao newsDao = new NewsDaoImpl();
+	private final NewsDao newsDao;
+	
+	 @Autowired
+	 public NewsServiceImpl(NewsDao newsDao) {
+		 this.newsDao = newsDao;
+	 }
 
 	@Override
 	public List<News> getAllNews() {
-		System.out.println("--------------------------Service1");
 		return newsDao.getAllNews();
 	}
 
 	@Override
-	public News getNewsById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public News getNewsById(int id) {
+		return newsDao.getNewsById(id);
+		
 	}
 
 	@Override
 	public void addNews(News news) {
-		// TODO Auto-generated method stub
+		 newsDao.addNews(news);
 		
 	}
 
 	@Override
 	public void updateNews(News news) {
-		// TODO Auto-generated method stub
+		newsDao.updateNews(news);
 		
 	}
 
 	@Override
-	public void deleteNews(Long id) {
-		// TODO Auto-generated method stub
+	public void deleteNews(int id) {
+		newsDao.deleteNews(id);
 		
 	}
 

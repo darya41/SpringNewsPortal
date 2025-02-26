@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Article</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        .news-article {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .news-article h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .news-article p {
+            margin-bottom: 10px;
+        }
+        .news-article .meta {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="news-article">
+        <h1 th:text="${news.title}">Title</h1>
+        <p class="meta">By <span th:text="${news.author}">Author</span> | <span th:text="${news.publicationDate}">Publication Date</span> | Views: <span th:text="${news.views}">Views</span></p>
+        <h2 th:text="${news.brief}">Brief</h2>
+        <p th:text="${news.content}">Content</p>
+        <p>Status: <span th:text="${news.status}">Status</span> | Priority: <span th:text="${news.priority}">Priority</span> | Category ID: <span th:text="${news.idCategory}">Category ID</span></p>
+    </div>
+</body>
+</html>

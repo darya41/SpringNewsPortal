@@ -4,49 +4,72 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.springframework.stereotype.Repository;
 
 import app.yarmak.newsportal.dao.NewsDao;
 import app.yarmak.newsportal.model.News;
 
+@Repository
 public class NewsDaoImpl implements NewsDao {
 	
 	private final SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 
 	@Override
 	public List<News> getAllNews() {
-		System.out.println("--------------------------D1");
 		try (Session session = factory.openSession()) {
-			System.out.println("--------------------------");
             return session.createQuery("from News", News.class).getResultList(); 
         } catch (Exception e) {   
-        	System.out.println("--------------------------ERROR");
-        	e.printStackTrace();
+        	
             return null; 
         }
 	}
 
 	@Override
-	public News getNewsById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public News getNewsById(int id) {
+		try (Session session = factory.openSession()) {
+            return session.get(News.class,id); 
+        } catch (Exception e) {   
+        	
+            return null; 
+        }
 	}
 
 	@Override
 	public void addNews(News news) {
-		// TODO Auto-generated method stub
+		try (Session session = factory.openSession()) {
+            session.beginTransaction();
+            session.persist(news);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            
+        }
 		
 	}
 
 	@Override
 	public void updateNews(News news) {
-		// TODO Auto-generated method stub
-		
+	   
+	    try (Session session = factory.openSession()) {
+	    	session.merge(news);
+	    } catch (Exception e) {
+	    }
 	}
 
+
+
 	@Override
-	public void deleteNews(Long id) {
-		// TODO Auto-generated method stub
+	public void deleteNews(int id) {
+		try (Session session = factory.openSession()) {
+            session.beginTransaction();
+            News news = session.get(News.class, id);
+            if (news != null) {
+                session.remove(news);
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+        }
 		
 	}
 
