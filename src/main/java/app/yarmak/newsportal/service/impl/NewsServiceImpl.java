@@ -3,14 +3,14 @@ package app.yarmak.newsportal.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import app.yarmak.newsportal.model.News;
 import app.yarmak.newsportal.service.NewsService;
+import app.yarmak.newsportal.service.ServiceException;
 import app.yarmak.newsportal.dao.*;
 
-@Component
 @Service
 public class NewsServiceImpl implements NewsService{
 	
@@ -20,34 +20,54 @@ public class NewsServiceImpl implements NewsService{
 	 public NewsServiceImpl(NewsDao newsDao) {
 		 this.newsDao = newsDao;
 	 }
+	 
+	 @Transactional
+	 @Override
+	 public List<News> getAllNews() {
+		try {
+			return newsDao.getAllNews();
+		}catch (DAOException e) {
+			 throw new ServiceException("Ошибка при получении списка новостей", e);
+		}
+	 }
 
-	@Override
-	public List<News> getAllNews() {
-		return newsDao.getAllNews();
-	}
+	 @Transactional
+	 @Override
+	 public News getNewsById(int id) {
+		try {
+			return newsDao.getNewsById(id);
+		}catch (DAOException e) {
+			throw new ServiceException("Ошибка при получении новости с ID: " + id, e);
+		}		
+	 }
 
-	@Override
-	public News getNewsById(int id) {
-		return newsDao.getNewsById(id);
-		
-	}
+	 @Transactional
+	 @Override
+	 public void addNews(News news) {
+		try {
+			newsDao.addNews(news);
+		}catch (DAOException e) {
+			 throw new ServiceException("Ошибка при добавлении новости", e);
+		}		
+	 }
 
-	@Override
-	public void addNews(News news) {
-		 newsDao.addNews(news);
-		
-	}
+	 @Transactional
+	 @Override
+	 public void updateNews(News news) {
+		try {
+			newsDao.updateNews(news);
+		}catch (DAOException e) {
+			throw new ServiceException("Ошибка при обновлении новости с ID: " + news.getId(), e);
+		}		
+	 }
 
-	@Override
-	public void updateNews(News news) {
-		newsDao.updateNews(news);
-		
-	}
-
-	@Override
-	public void deleteNews(int id) {
-		newsDao.deleteNews(id);
-		
-	}
-
+	 @Transactional
+	 @Override
+	 public void deleteNews(int id) {
+		try {
+			newsDao.deleteNews(id);
+		}catch (DAOException e) {
+			 throw new ServiceException("Ошибка при удалении новости с ID: " + id, e);
+		}	
+	 }
 }

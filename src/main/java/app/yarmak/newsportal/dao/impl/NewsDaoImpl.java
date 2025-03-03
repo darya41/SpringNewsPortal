@@ -2,12 +2,14 @@ package app.yarmak.newsportal.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
 
+import app.yarmak.newsportal.dao.DAOException;
 import app.yarmak.newsportal.dao.NewsDao;
 import app.yarmak.newsportal.model.News;
 
@@ -20,9 +22,8 @@ public class NewsDaoImpl implements NewsDao {
 	public List<News> getAllNews() {
 		try (Session session = factory.openSession()) {
             return session.createQuery("from News", News.class).getResultList(); 
-        } catch (Exception e) {   
-        	
-            return null; 
+        } catch (HibernateException e) {          	
+        	 throw new DAOException("Ошибка при получении всех новостей", e);
         }
 	}
 
@@ -30,9 +31,8 @@ public class NewsDaoImpl implements NewsDao {
 	public News getNewsById(int id) {
 		try (Session session = factory.openSession()) {
             return session.get(News.class,id); 
-        } catch (Exception e) {   
-        	
-            return null; 
+        } catch (HibernateException e) {    	
+        	 throw new DAOException("Ошибка при получении новости по ID", e);
         }
 	}
 
@@ -42,22 +42,42 @@ public class NewsDaoImpl implements NewsDao {
             session.beginTransaction();
             session.persist(news);
             session.getTransaction().commit();
-        } catch (Exception e) {
-            
-        }
-		
+        } catch (HibernateException e) {
+        	throw new DAOException("Ошибка при добавлении новости", e);
+        }	
 	}
 
 	@Override
 	public void updateNews(News news) {
-	   
-	    try (Session session = factory.openSession()) {
-	    	session.merge(news);
-	    } catch (Exception e) {
+	    Session currentSession = factory.getCurrentSession();
+	    Transaction transaction = null;
+	    try {
+	        transaction = currentSession.beginTransaction();
+
+	        News existingNews = currentSession.get(News.class, news.getId());
+	        if (existingNews != null) {
+	        	
+	            existingNews.setTitle(news.getTitle());
+	            existingNews.setAuthor(news.getAuthor());
+	            existingNews.setBrief(news.getBrief());
+	            existingNews.setContent(news.getContent());
+	            existingNews.setPriority(news.getPriority());
+	            existingNews.setStatus(news.getStatus());
+
+	            currentSession.merge(existingNews);
+	        } else {
+	            throw new DAOException("Новость с ID " + news.getId() + " не найдена");
+	        }
+
+	        transaction.commit();
+	    } catch (HibernateException e) {
+	    	
+	        if (transaction != null) {
+	            transaction.rollback();
+	        }
+	        throw new DAOException("Ошибка при обновлении новости с ID " + news.getId(), e);
 	    }
 	}
-
-
 
 	@Override
 	public void deleteNews(int id) {
@@ -68,9 +88,8 @@ public class NewsDaoImpl implements NewsDao {
                 session.remove(news);
             }
             session.getTransaction().commit();
-        } catch (Exception e) {
-        }
-		
+        } catch (HibernateException e) {
+        	 throw new DAOException("Ошибка при удалении новости", e);
+        }		
 	}
-
 }

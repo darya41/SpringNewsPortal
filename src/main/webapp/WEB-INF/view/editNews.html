@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Add News</title>
+    <title>Редактировать новость</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,7 +48,10 @@
 <body>
     <h1>Редактировать статью</h1>
 
-    <form th:action="@{/login/add}" th:object="${news}" method="post">
+    <form th:action="@{/login/update}" th:object="${news}" method="post">
+    
+    	<input type="hidden" th:field="*{id}" />
+    	
         <label for="title">Название:</label>
         <input type="text" id="title" th:field="*{title}" required="required" />
         <br>
@@ -73,7 +76,7 @@
         <input type="text" id="status" th:field="*{status}" />
         <br>
 
-        <input type="submit" value="Изменить статью" />
+        <input type="submit" value="Изменить новость" />
     </form>
 </body>
 </html>

@@ -32,9 +32,8 @@ public class NewsController {
 	@RequestMapping("/showMainPage")
 	public String showMainPage(Model model) {
 		
-		 List<News> allNews = newsService.getAllNews();
-		 
-		 model.addAttribute("newsList", allNews);
+	    List<News> allNews = newsService.getAllNews();
+		model.addAttribute("newsList", allNews);
 		return "main-page";
 	}
 
@@ -47,35 +46,45 @@ public class NewsController {
 	@GetMapping("/editPage/{id}")
 	public String goToEditNewsPage(@PathVariable("id") int id, Model model) {
 		News news = newsService.getNewsById(id);
-		model.addAttribute("news", news);
-		return "editNews";
-	}
-	
+		if (news!=null) {
+			model.addAttribute("news", news);
+			return "editNews";
+		}
+		return "redirect:/login/showMainPage";		
+	}	
 
 	@GetMapping("/delete/{id}")
 	public String deleteNews(@PathVariable("id") int id) {
-		 newsService.deleteNews(id);
-	     return "redirect:/login/showMainPage";
+		if (id!=0) {
+			newsService.deleteNews(id);	
+		}
+		return "redirect:/login/showMainPage";
 	}
 	
 	@GetMapping("/viewNews/{id}")
 	public String viewNews(@PathVariable("id") int id,Model model) {
 		News news = newsService.getNewsById(id);
-		model.addAttribute("news", news);
-		return "viewNews";
+		if (news !=null) {
+			model.addAttribute("news", news);
+			return "viewNews";
+		}
+		return "redirect:/login/showMainPage";		
 	}
 	
 	@PostMapping("/add")
 	public String addNews(@ModelAttribute("news") News news) {	
 	    news.setPublicationDate(new Timestamp(System.currentTimeMillis()));
-		newsService.addNews(news);
+	    if (news!=null) {
+	    	newsService.addNews(news);
+	    }
 		return "redirect:/login/showMainPage";
 	}
 	
 	@PostMapping("/update")
 	public String update(@ModelAttribute("news") News news) {
-		newsService.updateNews(news);
+		if (news!=null) {
+			newsService.updateNews(news);
+		}
 		return "redirect:/login/showMainPage";
 	}
-
 }

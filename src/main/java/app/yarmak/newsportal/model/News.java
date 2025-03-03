@@ -2,7 +2,6 @@ package app.yarmak.newsportal.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,177 +9,71 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "news") // Corrected table name to "news"
 public class News implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "Id")
-  private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@NotNull(message = "Поле id пустое")
+	@Column(name = "Id")
+	private int id;
 
-  @Column(name = "title")
-  private String title;
+	@NotEmpty(message = "Поле название не заполнено")
+	@Size(max = 255, message = "Название не должно превышать 255 символов")
+	@Column(name = "title")
+	private String title;
 
-  @Column(name = "brief")
-  private String brief;
+	@NotEmpty(message = "Поле краткое описание не заполнено")
+	@Size(max = 500, message = "Краткое описание не должно превышать 500 символов")
+	@Column(name = "brief")
+	private String brief;
 
-  @Column(name = "content")
-  private String content;
+  
+	@NotEmpty(message = "Поле содержание не заполнено")
+	@Size(max = 2000, message = "Содержание не должно превышать 2000 символов")
+	@Column(name = "content")
+	private String content;
 
-  @Column(name = "author")
-  private String author;
+	@NotEmpty(message = "Поле автор не заполнено")
+	@Size(max = 100, message = "Автор не должен превышать 100 символов")
+	@Column(name = "author")
+	private String author;
 
-  @Column(name = "publicationDate")
-  private Timestamp publicationDate;
+	@Column(name = "publicationDate")
+	private Timestamp publicationDate;
 
-  @Column(name = "views")
-  private int views;
+	@NotNull(message = "Просмотры не могут быть меньше 0 или вообще их не быть")
+	@Column(name = "views")
+	private int views;
 
-  @Column(name = "priority")
-  private int priority;
+	@NotNull
+	@Min(value = 0, message = "Приоритет не должен быть меньше 0")
+	@Max(value = 10, message="Приоритет не должен быть больше 10") 
+	@Column(name = "priority")
+	private int priority;
 
-  @Column(name = "statusNews")
-  private String status;
+	@NotEmpty(message = "Поле статус не заполнено")
+	@Size(max = 45, message = "Статус не должен превышать 45 символов")
+	@Column(name = "statusNews")
+	private String status;
 
-  @Column(name = "idCategory") // Added idCategory field
-  private int idCategory;
-
-  public News() {
-	}
-	
-	public News(int id,String title, String brief, String content, String author, 
-			Timestamp  publicationDate,int idCategory,int views, int priority, String status) {
-		super();
-		this.id=id;
-		this.title = title;
-		this.brief = brief;
-		this.content=content;
-		this.author=author;
-		this.publicationDate=publicationDate;
-		this.idCategory=idCategory;
-		this.views=views;
-		this.priority = priority;
-		this.status = status;
-	}
-	public int getId() {
-		return id;
-	}
-	
-	public void setId(int id) {
-		this.id=id;
-	}
-	
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getBrief() {
-		return brief;
-	}
-
-	public void setBrief(String brief) {
-		this.brief = brief;
-	}
-	
-	public String getContent() {
-     return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
-	public Timestamp  getPublicationDate() {
-		return publicationDate;
-	}
-
-	public void setPublicationDate(Timestamp  publicationDate) {
-		this.publicationDate = publicationDate;
-	}
-
-	public int getCategory() {
-		return idCategory;
-	}
-
-	public void setCategory(int category) {
-		this.idCategory = category;
-	}
-
-	public int getViews() {
-		return views;
-	}
-
-	public void setViews(int views) {
-		this.views = views;
-	}
- 
-	public int getPriority() {
-		return priority;
-	}
-
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
-	public String getStatus() {
-	   return status;
-	}
-	public void setStatus(String status) {
-	   this.status=status;
-	}
-
-	
-	@Override
-	public int hashCode() {
-		 return Objects.hash(id, title, brief, content, author, publicationDate, idCategory, views,priority, status);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-	    if (obj == null || getClass() != obj.getClass()) return false;
-	    News news = (News) obj;
-	    return id == news.id &&
-	            views == news.views &&
-	            Objects.equals(title, news.title) &&
-	            Objects.equals(brief, news.brief) &&
-	            Objects.equals(content, news.content) &&
-	            Objects.equals(author, news.author) &&
-	            Objects.equals(publicationDate, news.publicationDate) &&
-	            Objects.equals(idCategory, news.idCategory)&&
-	            Objects.equals(priority, news.priority)&&
-	    		Objects.equals(status, news.status);
-	    
-	}
-
-	@Override
-	public String toString() {
-     return "News{" +
-             "id=" + id +
-             ", title='" + title + '\'' +
-             ", summary='" + brief + '\'' +
-             ", content='" + content + '\'' +
-             ", author='" + author + '\'' +
-             ", publicationDate=" + publicationDate +
-             ", category='" + idCategory + '\'' +
-             ", views=" + views +
-              ", views=" + views +
-               ", views=" + views +
-             '}';
- }	
+	@NotNull(message = "Категория не выбрана")
+	@Column(name = "idCategory")
+	private int idCategory;
 }

@@ -12,6 +12,7 @@
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
 		<bean id="news" class="app.yarmak.newsportal.model.News"></bean>
+
  
 	<!-- Step 3: Add support for component scanning -->
 	<context:component-scan
